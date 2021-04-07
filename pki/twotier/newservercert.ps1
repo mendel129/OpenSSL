@@ -1,4 +1,4 @@
-$domainname="www.fqdn.tld"
+$commonname="www.fqdn.tld"
 
 $subject="/CN=$($domainname)"
 .\openssl genpkey -algorithm ec -pkeyopt ec_paramgen_curve:prime256v1 -pkeyopt ec_param_enc:named_curve -out leafs/private/endentity_$($domainname).key
