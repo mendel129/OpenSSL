@@ -1,0 +1,19 @@
+#get compiled Windows binaries from OpenSSL
+#https://wiki.openssl.org/index.php/Binaries
+#https://curl.se/windows/
+curl https://curl.se/windows/dl-7.76.0/openssl-1.1.1k-win64-mingw.zip --output openssl-1.1.1k-win64-mingw.zip
+#files of interest: openssl.exe, openssl.cnf, libssl-1_1-x64.dll, libcrypto-1_1-x64.dll
+
+
+#posh
+Invoke-WebRequest https://curl.se/windows/dl-7.76.0/openssl-1.1.1k-win64-mingw.zip -OutFile openssl-1.1.1k-win64-mingw.zip
+Add-Type -Assembly System.IO.Compression.FileSystem
+$zip = [IO.Compression.ZipFile]::OpenRead("$(pwd)\openssl-1.1.1k-win64-mingw.zip")
+mkdir openssl_1.1.1k
+$zip.Entries | where {$_.Name -eq 'openssl.exe'} | foreach {[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$(pwd)\openssl_1.1.1k\openssl.exe", $true)}
+$zip.Entries | where {$_.Name -eq 'openssl.cnf'} | foreach {[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$(pwd)\openssl_1.1.1k\openssl.cnf", $true)}
+$zip.Entries | where {$_.Name -eq 'libssl-1_1-x64.dll'} | foreach {[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$(pwd)\openssl_1.1.1k\libssl-1_1-x64.dll", $true)}
+$zip.Entries | where {$_.Name -eq 'libcrypto-1_1-x64.dll'} | foreach {[System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$(pwd)\openssl_1.1.1k\libcrypto-1_1-x64.dll", $true)}
+$zip.Dispose()
+rm openssl-1.1.1k-win64-mingw.zip
+.\openssl_1.1.1k\openssl.exe version
