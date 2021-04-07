@@ -35,4 +35,4 @@ mkdir leafs/csr
 $subject="/CN=confirmation_certificate"
 .\openssl genpkey -algorithm ec -pkeyopt ec_paramgen_curve:prime256v1 -pkeyopt ec_param_enc:named_curve -out leafs/private/endentity.key
 .\openssl req -config IssuingCATemplate.cnf -key leafs/private/endentity.key -subj $subject -new -sha256 -out leafs/csr/endentity.csr
-.\openssl ca -passin pass:$interpass -config openssl_issuing.cnf -days 375 -extensions CustomPKIServerCert -notext -md sha256 -in leafs/csr/endentity.csr -out leafs/endentity.cert -batch
+.\openssl ca -passin pass:$interpass -config IssuingCATemplate.cnf -days 375 -extensions CustomPKIServerCert -notext -md sha256 -in leafs/csr/endentity.csr -out leafs/endentity.cert -batch
